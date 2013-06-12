@@ -41,9 +41,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="Eto.Platform.Windows, Version=1.1.0.25029, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Eto.Platform.Windows.dll</HintPath>
+    <Reference Include="Eto.Platform.Wpf">
+      <HintPath>..\Lib\Eto.Platform.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
