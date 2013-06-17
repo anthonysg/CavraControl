@@ -197,8 +197,8 @@ namespace Cavra_Control
                 leftMutebtn.Click += MuteLeftSlider;
                 layout.BeginHorizontal();
                 layout.Add(leftSlider, true, false);
-                layout.Add(leftSlidertxtbox);
-                layout.Add(leftMutebtn);                
+                layout.Add(leftSlidertxtbox, false, false);
+                layout.Add(leftMutebtn, false, false);                
 
                 return layout.Container;
             }
