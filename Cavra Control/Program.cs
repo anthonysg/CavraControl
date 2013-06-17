@@ -138,7 +138,7 @@ namespace Cavra_Control
                 stop.Click += delegate { if (null != player) player.Stop(); };
                 
                 var btn_panel = new DynamicLayout(new Panel());
-                btn_panel.AddRow(play, stop, null);
+                btn_panel.AddRow(null, play, stop);
                 
                 layout.Add(btn_panel.Container, false, false);
                 return layout.Container;
