@@ -44,9 +44,11 @@ namespace Cavra_Control
             public CavraControl()
             {
                 this.ClientSize = new Size(400, 350);
-                this.WindowState = WindowState.Normal;
                 this.Title = "Cavra Control";
-                this.BringToFront();
+#if WINDOWS               
+                this.WindowState = WindowState.Normal;
+				this.BringToFront();
+#endif
                 //Size defaultSize = new Size(this.Screen.Bounds.Width - 50, this.Screen.Bounds.Height - 50);
                 //this.Size = defaultSize;
                 //int screenX = (int)(this.Screen.Bounds.X - 100);
@@ -106,7 +108,7 @@ namespace Cavra_Control
                 Label wavefile = new Label
                 {
                     Text = "WaveFile",
-                    TextColor = Color.Blue,
+                    TextColor = Colors.Blue,
                     HorizontalAlign = HorizontalAlign.Left
                 };
 
