@@ -106,7 +106,7 @@ namespace Cavra_Control
                 Label wavefile = new Label
                 {
                     Text = "WaveFile",
-                    TextColor = Color.Blue,
+                    TextColor = Colors.Blue,
                     HorizontalAlign = HorizontalAlign.Left
                 };
 
@@ -156,15 +156,27 @@ namespace Cavra_Control
                 rightSlider.ValueChanged += rightSliderChanged;
 
                 rightSlidertxtbox = new TextBox();
+                rightSlidertxtbox.Font = new Font(SystemFont.Default, 8);
                 int rightValue = 50;
                 rightSlidertxtbox.Text = rightValue.ToString();
+                rightSlidertxtbox.MaxLength = 3;
+                //rightSlidertxtbox.TextChanged += RightSlidertxtboxSizeChanging;
                 rightSlidertxtbox.TextChanged += rightSliderTxtBoxChanged;
 
                 rightMutebtn = new Button();
                 rightMutebtn.Text = "Mute";
                 rightMutebtn.Click += MuteRightSlider;
+                //
+                Label rightSliderlbl = new Label();
+                rightSliderlbl.Text = "Right Slider";
+                rightSliderlbl.HorizontalAlign = HorizontalAlign.Center;
+
+                layout.BeginHorizontal();
+                layout.Add(rightSlider, true, false);
+                layout.Add(rightSlidertxtbox, false, false);
+                layout.Add(rightMutebtn, false, false);
                 
-                layout.AddRow(rightSlider, rightSlidertxtbox, rightMutebtn);
+                //layout.AddRow(rightSliderlbl, rightSlider, rightSlidertxtbox, rightMutebtn);
 
                 leftSlider = new Slider();
                 leftSlider.Value = 50;
@@ -173,8 +185,10 @@ namespace Cavra_Control
                 leftSlider.ValueChanged += leftSliderChanged;
 
                 leftSlidertxtbox = new TextBox();
+                leftSlidertxtbox.Font = new Font(SystemFont.Default, 8);
                 int leftValue = 50;
                 leftSlidertxtbox.Text = (string)leftValue.ToString();
+                leftSlidertxtbox.MaxLength = 3;
                 leftSlidertxtbox.TextChanged += leftSliderTxtBoxChanged;
 
                 leftMutebtn = new Button();
@@ -187,6 +201,7 @@ namespace Cavra_Control
 
                 return layout.Container;
             }
+
 
             void OpenFileDialogWindow(object sender, EventArgs e)
             {
@@ -263,6 +278,24 @@ namespace Cavra_Control
                 leftSlider.Value = 100;
                 rightSlidertxtbox.Text = "100";
             }
+/* Text Dialog that changes size is WIP.
+            void RightSlidertxtboxSizeChanging(object sender, EventArgs e)
+            {
+                string str = rightSlidertxtbox.Text;
+                Font font = new Font(SystemFont.Default, 17);
+                rightSlidertxtbox.Size = new Size(MeasureTextSize(font, str));
+                //rightSlidertxtbox.Size = new Size(rightSlidertxtbox.Text.Length*13, 25);
+                
+                //find a way to measure text size and adjust textbox based off of that.
+            }
+
+            public SizeF MeasureTextSize(Font font, string str)
+            {
+                Graphics graphics = new Graphics(new Bitmap(12, 12, PixelFormat.Format32bppRgb));
+                //get rid of micrsoft references at top.
+                return graphics.MeasureString(font, str);
+            }
+ * */
         }
     }
 }
