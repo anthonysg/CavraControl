@@ -130,12 +130,14 @@ namespace Cavra_Control
                 layout.Add(file_panel.Container);
                                       
                 Button play = new Button();
+                play.Text = "Play";
                 play.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\playicon.png");
-                play.ImagePosition = ButtonImagePosition.Overlay;
+                //play.ImagePosition = ButtonImagePosition.Overlay; This is needed if text is removed and icon needs to be centered.
                 play.Click += delegate { if (null != player) player.Play(); };
                 
                 Button stop = new Button();
-                stop.Text = "STOP";
+                stop.Text = "Stop";
+                stop.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\stopicon.png");
                 stop.Click += delegate { if (null != player) player.Stop(); };
                 
                 var btn_panel = new DynamicLayout(new Panel());
