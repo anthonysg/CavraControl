@@ -168,6 +168,7 @@ namespace Cavra_Control
 
                 rightMutebtn = new Button();
                 rightMutebtn.Text = "Mute";
+                rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
                 rightMutebtn.Click += MuteRightSlider;
                 //
                 Label rightSliderlbl = new Label();
@@ -196,6 +197,8 @@ namespace Cavra_Control
 
                 leftMutebtn = new Button();
                 leftMutebtn.Text = "Mute";
+                leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftmute.png");
+                leftMutebtn.ImagePosition = ButtonImagePosition.Right;
                 leftMutebtn.Click += MuteLeftSlider;
                 layout.BeginHorizontal();
                 layout.Add(leftSlider, true, false);
