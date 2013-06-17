@@ -130,7 +130,8 @@ namespace Cavra_Control
                 layout.Add(file_panel.Container);
                                       
                 Button play = new Button();
-                play.Text = "PLAY";
+                play.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\playicon.png");
+                play.ImagePosition = ButtonImagePosition.Overlay;
                 play.Click += delegate { if (null != player) player.Play(); };
                 
                 Button stop = new Button();
