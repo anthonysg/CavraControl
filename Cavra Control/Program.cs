@@ -66,6 +66,7 @@ namespace Cavra_Control
                 FormLayoutEstablish();
             }
 #if CENTERED_WINDOWS_FEATURE
+            //wip
             void OnFormLoaded(object s, EventArgs e)
             {
                 screenX = (int)(this.Screen.Bounds.X - 2000);
@@ -213,8 +214,7 @@ namespace Cavra_Control
                 layout.BeginHorizontal();
                 layout.Add(leftSlider, true, false);
                 layout.Add(leftSlidertxtbox, false, false);
-                layout.Add(leftMutebtn, false, false);                
-
+                layout.Add(leftMutebtn, false, false);
                 return layout.Container;
             }
 
@@ -250,6 +250,10 @@ namespace Cavra_Control
                 {
                     rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
                 }
+                else if (rightSlider.Value <= 50)
+                {
+                    rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightsoundmediumon.png");
+                }
                 else
                 {
                     rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightsoundon.png");
@@ -262,6 +266,10 @@ namespace Cavra_Control
                 if (leftSlider.Value == 100)
                 {
                     leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftmute.png");
+                }
+                else if (leftSlider.Value <= 50)
+                {
+                    leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftsoundmediumon.png");
                 }
                 else
                 {
