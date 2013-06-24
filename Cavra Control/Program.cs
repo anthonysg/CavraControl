@@ -47,36 +47,39 @@ namespace Cavra_Control
                 this.WindowState = WindowState.Normal;
                 this.Title = "Cavra Control";
                 this.BringToFront();
-                //Size defaultSize = new Size(this.Screen.Bounds.Width - 50, this.Screen.Bounds.Height - 50);
-                //this.Size = defaultSize;
-                //int screenX = (int)(this.Screen.Bounds.X - 100);
-                //int screenY = (int)(this.Screen.Bounds.X - 100);
-                //Eto.Drawing.Point point = new Point(this.Screen.Bounds.X - 100, this.Screen.Bounds.Y - 100);
-                
+/*
+
+                Size defaultSize = new Size(this.Screen.Bounds.Width - 50, this.Screen.Bounds.Height - 50);
+                this.Size = defaultSize;
+                int screenX = (int)(this.Screen.Bounds.X - 100);
+                int screenY = (int)(this.Screen.Bounds.X - 100);
+                Eto.Drawing.Point point = new Point(this.Screen.Bounds.X - 100, this.Screen.Bounds.Y - 100);                             
+*/
                 //try to get window to appear centered at all times.
                 
-
                 //this.Load += OnFormLoaded;
+
                 /*
                 this.Shown += OnFormShown;
                 this.Show();
                 */
                 FormLayoutEstablish();
             }
-
-            //void OnFormLoaded(object s, EventArgs e)
-            //{
-                //screenX = (int)(this.Screen.Bounds.X - 2000);
-                //screenY = (int)(this.Screen.Bounds.Y - 1);
-            //}
+#if CENTERED_WINDOWS_FEATURE
+            void OnFormLoaded(object s, EventArgs e)
+            {
+                screenX = (int)(this.Screen.Bounds.X - 2000);
+                screenY = (int)(this.Screen.Bounds.Y - 1);
+            }
             
-            //location not finished-, use .PrimaryScreen() instead
-            /*
+            location not finished-, use .PrimaryScreen() instead
+            
             void OnFormShown(object s, EventArgs e)
             {
                 this.Location = (Point)(this.Screen.Bounds.Center - (this.Size / 2));
             }
-            */
+            
+#endif
             void FormLayoutEstablish()
             {
                 var root_panel = new DynamicLayout(this);
@@ -167,8 +170,8 @@ namespace Cavra_Control
                 rightSlidertxtbox.TextChanged += rightSliderTxtBoxChanged;
 
                 rightMutebtn = new Button();
-                rightMutebtn.Text = "Mute";
                 rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
+                rightMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 rightMutebtn.Click += MuteRightSlider;
                 //
                 Label rightSliderlbl = new Label();
@@ -196,9 +199,8 @@ namespace Cavra_Control
                 leftSlidertxtbox.TextChanged += leftSliderTxtBoxChanged;
 
                 leftMutebtn = new Button();
-                leftMutebtn.Text = "Mute";
                 leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftmute.png");
-                leftMutebtn.ImagePosition = ButtonImagePosition.Right;
+                leftMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 leftMutebtn.Click += MuteLeftSlider;
                 layout.BeginHorizontal();
                 layout.Add(leftSlider, true, false);
