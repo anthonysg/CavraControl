@@ -170,9 +170,16 @@ namespace Cavra_Control
                 rightSlidertxtbox.TextChanged += rightSliderTxtBoxChanged;
 
                 rightMutebtn = new Button();
-                rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
+                rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightsoundon.png");
                 rightMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 rightMutebtn.Click += MuteRightSlider;
+                
+                /* if you want no borders around mute button.
+                ImageView image = new ImageView();
+                image.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
+                image.MouseDown += MuteRightSlider;
+                 */
+
                 //
                 Label rightSliderlbl = new Label();
                 rightSliderlbl.Text = "Right Slider";
@@ -182,7 +189,8 @@ namespace Cavra_Control
                 layout.Add(rightSlider, true, false);
                 layout.Add(rightSlidertxtbox, false, false);
                 layout.Add(rightMutebtn, false, false);
-                
+                //layout.Add(image, false, false);
+
                 //layout.AddRow(rightSliderlbl, rightSlider, rightSlidertxtbox, rightMutebtn);
 
                 leftSlider = new Slider();
@@ -199,7 +207,7 @@ namespace Cavra_Control
                 leftSlidertxtbox.TextChanged += leftSliderTxtBoxChanged;
 
                 leftMutebtn = new Button();
-                leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftmute.png");
+                leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftsoundon.png");
                 leftMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 leftMutebtn.Click += MuteLeftSlider;
                 layout.BeginHorizontal();
@@ -238,11 +246,27 @@ namespace Cavra_Control
 
             void rightSliderChanged(object sender, EventArgs e)
             {
+                if (rightSlider.Value == 100)
+                {
+                    rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
+                }
+                else
+                {
+                    rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightsoundon.png");
+                }
                 rightSlidertxtbox.Text = rightSlider.Value.ToString();
             }
 
             void leftSliderChanged(object sender, EventArgs e)
             {
+                if (leftSlider.Value == 100)
+                {
+                    leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftmute.png");
+                }
+                else
+                {
+                    leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftsoundon.png");
+                }
                 leftSlidertxtbox.Text = leftSlider.Value.ToString();
             }
 
