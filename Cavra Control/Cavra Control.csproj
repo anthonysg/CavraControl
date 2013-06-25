@@ -37,11 +37,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto, Version=1.1.0.24594, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Eto, Version=1.1.0.25805, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="Eto.Platform.Wpf">
+    <Reference Include="Eto.Platform.Wpf, Version=1.1.0.25860, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Eto.Platform.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -53,10 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Preload.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
