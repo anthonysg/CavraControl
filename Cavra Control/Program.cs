@@ -16,9 +16,9 @@ namespace Cavra_Control
 
             var app = new Application();
 
-            Uri resourceslocation = new Uri(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources));
-            string resourceLocationStr = resourceslocation.ToString();
-            Preload.SetResourcePath(resourceLocationStr);
+            //Uri resourceslocation = new Uri(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources));
+            //string resourceLocationStr = resourceslocation.ToString();
+            //Preload.SetResourcePath(resourceLocationStr);
 
             app.Initialized += delegate
             {

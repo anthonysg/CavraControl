@@ -12,7 +12,10 @@ namespace Cavra_Control
     public static class Preload
     {
         static Dictionary<string, Image> cache = new Dictionary<string, Image>();
-        static string image_path = Environment.CurrentDirectory;
+        static string image_path = Directory.GetCurrentDirectory();
+        
+
+
 
         public static void SetResourcePath(string path)
         {
