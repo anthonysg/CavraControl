@@ -57,7 +57,7 @@ namespace Cavra_Control
                 this.WindowState = WindowState.Normal;
                 this.Title = "Cavra Control";
                 this.BringToFront();
-                //preload images.
+                //preload images and insert into cache.
                 Preload.ImageResource("rightmute.png");  // , 22, 22, ImageInterpolation.Default, null);
                 Preload.ImageResource("rightsoundmediumon.png");
                 Preload.ImageResource("rightsoundon.png");
@@ -154,7 +154,7 @@ namespace Cavra_Control
                                       
                 Button play = new Button();
                 play.Text = "Play";
-                play.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\playicon.png");
+                play.Image = Preload.ImageResource("playicon.png");
                 play.Click += delegate { if (null != player)
                     try { player.Play(); }
                     catch (Exception exc)
@@ -164,7 +164,7 @@ namespace Cavra_Control
                 
                 Button stop = new Button();
                 stop.Text = "Stop";
-                stop.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\stopicon.png");
+                stop.Image = Preload.ImageResource("stopicon.png");
                 stop.Click += delegate { if (null != player) player.Stop(); };
                 
                 var btn_panel = new DynamicLayout(new Panel());
@@ -194,7 +194,7 @@ namespace Cavra_Control
                 rightSlidertxtbox.TextChanged += rightSliderTxtBoxChanged;
 
                 rightMutebtn = new Button();
-                rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightsoundon.png");
+                rightMutebtn.Image = Preload.ImageResource("rightsoundon.png");
                 rightMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 rightMutebtn.Click += MuteRightSlider;
                 
@@ -231,7 +231,7 @@ namespace Cavra_Control
                 leftSlidertxtbox.TextChanged += leftSliderTxtBoxChanged;
 
                 leftMutebtn = new Button();
-                leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftsoundon.png");
+                leftMutebtn.Image = Preload.ImageResource("leftsoundon.png");
                 leftMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 leftMutebtn.Click += MuteLeftSlider;
                 layout.BeginHorizontal();
