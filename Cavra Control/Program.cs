@@ -13,7 +13,12 @@ namespace Cavra_Control
         [STAThread]
         public static void Main(string[] args)
         {
+
             var app = new Application();
+
+            Uri resourceslocation = new Uri(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources));
+            string resourceLocationStr = resourceslocation.ToString();
+            Preload.SetResourcePath(resourceLocationStr);
 
             app.Initialized += delegate
             {
@@ -39,7 +44,12 @@ namespace Cavra_Control
             Button rightMutebtn;
             Button leftMutebtn;
             
-            SoundPlayer player = null;            
+            SoundPlayer player = null;
+            string wavefilestring;
+
+            int rightSliderValueSaved;
+            int leftSliderValueSaved;
+            
 
             public CavraControl()
             {
@@ -47,8 +57,16 @@ namespace Cavra_Control
                 this.WindowState = WindowState.Normal;
                 this.Title = "Cavra Control";
                 this.BringToFront();
-/*
+                //preload images.
+                Preload.ImageResource("rightmute.png");  // , 22, 22, ImageInterpolation.Default, null);
+                Preload.ImageResource("rightsoundmediumon.png");
+                Preload.ImageResource("rightsoundon.png");
 
+                Preload.ImageResource("leftmute.png");
+                Preload.ImageResource("leftsoundmediumon.png");
+                Preload.ImageResource("leftsoundon.png");
+                    /*
+ * 
                 Size defaultSize = new Size(this.Screen.Bounds.Width - 50, this.Screen.Bounds.Height - 50);
                 this.Size = defaultSize;
                 int screenX = (int)(this.Screen.Bounds.X - 100);
@@ -114,10 +132,11 @@ namespace Cavra_Control
                     HorizontalAlign = HorizontalAlign.Left
                 };
 
-                waveFiletxtbox = new TextBox
-                {
-                    PlaceholderText = "Open a Wave File"
-                };
+                waveFiletxtbox = new TextBox();
+                waveFiletxtbox.Text = "Open a Wave File";
+                wavefilestring = waveFiletxtbox.Text;
+                waveFiletxtbox.TextChanged += TextChangeInWaveFileTxtBox;
+                
 
                 Button open = new Button
                 {
@@ -136,8 +155,12 @@ namespace Cavra_Control
                 Button play = new Button();
                 play.Text = "Play";
                 play.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\playicon.png");
-                //play.ImagePosition = ButtonImagePosition.Overlay; This is needed if text is removed and icon needs to be centered.
-                play.Click += delegate { if (null != player) player.Play(); };
+                play.Click += delegate { if (null != player)
+                    try { player.Play(); }
+                    catch (Exception exc)
+                    {
+                    }
+                    };
                 
                 Button stop = new Button();
                 stop.Text = "Stop";
@@ -234,29 +257,41 @@ namespace Cavra_Control
                 if (openfiledialog.ShowDialog(ParentWindow) == DialogResult.Ok)
                 {
                     waveFiletxtbox.Text = openfiledialog.FileName;
+                    player = new SoundPlayer(waveFiletxtbox.Text);
                     /*
                     if (null != player)
                         player.Stop();
-
-                    player = new SoundPlayer(openfiledialog.FileName);
-                     */
+                    */
+                     
                 }            
                 
+            }
+
+            void TextChangeInWaveFileTxtBox(object sender, EventArgs e)
+            {
+                try
+                {
+                    player = new SoundPlayer(waveFiletxtbox.Text);
+                }
+                catch (Exception ex)
+                {
+                    player = null;
+                }
             }
 
             void rightSliderChanged(object sender, EventArgs e)
             {
                 if (rightSlider.Value == 100)
                 {
-                    rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
+                    rightMutebtn.Image = Preload.ImageResource("rightmute.png");
                 }
-                else if (rightSlider.Value <= 50)
+                else if (rightSlider.Value >= 50)
                 {
-                    rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightsoundmediumon.png");
+                    rightMutebtn.Image = Preload.ImageResource("rightsoundmediumon.png");
                 }
                 else
                 {
-                    rightMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightsoundon.png");
+                    rightMutebtn.Image = Preload.ImageResource("rightsoundon.png");
                 }
                 rightSlidertxtbox.Text = rightSlider.Value.ToString();
             }
@@ -265,15 +300,15 @@ namespace Cavra_Control
             {
                 if (leftSlider.Value == 100)
                 {
-                    leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftmute.png");
+                    leftMutebtn.Image = Preload.ImageResource("leftmute.png");
                 }
-                else if (leftSlider.Value <= 50)
+                else if (leftSlider.Value >= 50)
                 {
-                    leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftsoundmediumon.png");
+                    leftMutebtn.Image = Preload.ImageResource("leftsoundmediumon.png");
                 }
                 else
                 {
-                    leftMutebtn.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\leftsoundon.png");
+                    leftMutebtn.Image = Preload.ImageResource("leftsoundon.png");
                 }
                 leftSlidertxtbox.Text = leftSlider.Value.ToString();
             }
@@ -309,14 +344,30 @@ namespace Cavra_Control
             }
             void MuteRightSlider(object sender, EventArgs e)
             {
-                rightSlider.Value = 100;
-                rightSlidertxtbox.Text = "100";
+                if (rightSlider.Value != 100)
+                {
+                    rightSliderValueSaved = rightSlider.Value;
+                    rightSlider.Value = 100;
+                    rightSlidertxtbox.Text = "100";
+                }
+                else
+                {
+                    rightSlider.Value = rightSliderValueSaved;
+                }
             }
 
             void MuteLeftSlider(object sender, EventArgs e)
             {
-                leftSlider.Value = 100;
-                rightSlidertxtbox.Text = "100";
+                if (leftSlider.Value != 100)
+                {
+                    leftSliderValueSaved = leftSlider.Value;
+                    leftSlider.Value = 100;
+                    leftSlidertxtbox.Text = "100";
+                }
+                else
+                {
+                    leftSlider.Value = leftSliderValueSaved;
+                }
             }
 /* Text Dialog that changes size is WIP.
             void RightSlidertxtboxSizeChanging(object sender, EventArgs e)
