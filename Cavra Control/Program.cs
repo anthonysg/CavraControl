@@ -16,9 +16,9 @@ namespace Cavra_Control
 
             var app = new Application();
 
-            //Uri resourceslocation = new Uri(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources));
-            //string resourceLocationStr = resourceslocation.ToString();
-            //Preload.SetResourcePath(resourceLocationStr);
+            Uri resourceslocation = new Uri(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources));
+            string resourceLocationStr = resourceslocation.ToString();
+            Preload.SetResourcePath(resourceLocationStr);
 
             app.Initialized += delegate
             {
@@ -65,7 +65,10 @@ namespace Cavra_Control
                 Preload.ImageResource("leftmute.png");
                 Preload.ImageResource("leftsoundmediumon.png");
                 Preload.ImageResource("leftsoundon.png");
-                    /*
+
+                GenerateToolBar();
+                
+                /*
  * 
                 Size defaultSize = new Size(this.Screen.Bounds.Width - 50, this.Screen.Bounds.Height - 50);
                 this.Size = defaultSize;
@@ -82,6 +85,7 @@ namespace Cavra_Control
                 this.Show();
                 */
                 FormLayoutEstablish();
+
             }
 #if CENTERED_WINDOWS_FEATURE
             //wip
@@ -99,10 +103,25 @@ namespace Cavra_Control
             }
             
 #endif
+            void GenerateToolBar()
+            {
+                ToolBar tool = new ToolBar();
+
+                ToolBarButton File_btn = new ToolBarButton();
+
+                File_btn.Text = "Macros ";
+                tool.Items.Add(File_btn);
+
+                ToolBarButton Macro_btn = new ToolBarButton();
+                Macro_btn.Text = " Recently Opened";
+                tool.Items.Add(Macro_btn);
+                this.ToolBar = tool;
+            }
+
             void FormLayoutEstablish()
             {
                 var root_panel = new DynamicLayout(this);
-
+                
                 root_panel.Add(PlayerControlBuilder());
                 root_panel.Add(VolumeControlBuilder());
                 root_panel.Add(new Panel());
@@ -171,6 +190,7 @@ namespace Cavra_Control
                 btn_panel.AddRow(null, play, stop);
                 
                 layout.Add(btn_panel.Container, false, false);
+                
                 return layout.Container;
             }
 
@@ -195,6 +215,7 @@ namespace Cavra_Control
 
                 rightMutebtn = new Button();
                 rightMutebtn.Image = Preload.ImageResource("rightsoundon.png");
+                rightMutebtn.BackgroundColor = Colors.LightSkyBlue;
                 rightMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 rightMutebtn.Click += MuteRightSlider;
                 
@@ -233,6 +254,7 @@ namespace Cavra_Control
                 leftMutebtn = new Button();
                 leftMutebtn.Image = Preload.ImageResource("leftsoundon.png");
                 leftMutebtn.ImagePosition = ButtonImagePosition.Overlay;
+                leftMutebtn.BackgroundColor = Colors.OrangeRed;
                 leftMutebtn.Click += MuteLeftSlider;
                 layout.BeginHorizontal();
                 layout.Add(leftSlider, true, false);
@@ -240,7 +262,7 @@ namespace Cavra_Control
                 layout.Add(leftMutebtn, false, false);
                 return layout.Container;
             }
-
+		
 
             void OpenFileDialogWindow(object sender, EventArgs e)
             {
