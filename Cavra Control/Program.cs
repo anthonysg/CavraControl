@@ -411,8 +411,9 @@ namespace Cavra_Control
                 string user_specified_fileName; //collect from user input and insert into MacroFunctionality.CreateNewMacro.
                 
                 macrofunctionality = new MacroFunctionality();
+
+                macrofunctionality.AskUserForMacroName_Dialog().ShowDialog(this);
                 
-                macrofunctionality.AskUserForMacroName_Dialog();
 
                 if (macrofunctionality.AskUserForMacroName_Dialog().DialogResult == DialogResult.Ok)
                 {

@@ -22,7 +22,7 @@ namespace Cavra_Control
             dialog.ClientSize= new Size(400, 200);
             dialog.WindowState = WindowState.Normal;
 
-            var layout = new DynamicLayout(AskUserForMacroName_Dialog());
+            var layout = new DynamicLayout(dialog);
             
             var instructions_lbl = new Label();
             
