@@ -49,6 +49,12 @@ namespace Cavra_Control
 
             int rightSliderValueSaved;
             int leftSliderValueSaved;
+
+            ImageMenuItem Macro_btn;
+
+            MacroFunctionality macrofunctionality;
+
+            MenuBar menu;
             
 
             public CavraControl()
@@ -66,7 +72,7 @@ namespace Cavra_Control
                 Preload.ImageResource("leftsoundmediumon.png");
                 Preload.ImageResource("leftsoundon.png");
 
-                GenerateToolBar();
+                GenerateMenu();
                 
                 /*
  * 
@@ -103,19 +109,27 @@ namespace Cavra_Control
             }
             
 #endif
-            void GenerateToolBar()
+            void GenerateMenu()
             {
-                ToolBar tool = new ToolBar();
+                menu = new MenuBar();
+               
+                Macro_btn = new ImageMenuItem { Text = "&Macros" };
 
-                ToolBarButton File_btn = new ToolBarButton();
+                var Create_New_btn = new ImageMenuItem();
+                Create_New_btn.Text = "Create New";
 
-                File_btn.Text = "Macros ";
-                tool.Items.Add(File_btn);
+                Macro_btn.MenuItems.Add(Create_New_btn);
+                
+                menu.MenuItems.Add(Macro_btn);
 
-                ToolBarButton Macro_btn = new ToolBarButton();
-                Macro_btn.Text = " Recently Opened";
-                tool.Items.Add(Macro_btn);
-                this.ToolBar = tool;
+                var recentlyopened_btn = new ImageMenuItem { Text = "&Recently Opened" };
+                menu.MenuItems.Add(recentlyopened_btn);
+
+
+
+                this.Menu = menu;
+
+                Macro_btn.Click += Macro_btn_Clicked;
             }
 
             void FormLayoutEstablish()
@@ -391,6 +405,28 @@ namespace Cavra_Control
                     leftSlider.Value = leftSliderValueSaved;
                 }
             }
+
+            void Macro_btn_Clicked(object sender, EventArgs e)
+            {
+                string user_specified_fileName; //collect from user input and insert into MacroFunctionality.CreateNewMacro.
+                
+                macrofunctionality = new MacroFunctionality();
+                
+                macrofunctionality.AskUserForMacroName_Dialog();
+
+                if (macrofunctionality.AskUserForMacroName_Dialog().DialogResult == DialogResult.Ok)
+                {
+                    Dialog_Button_OK_Clicked();
+                }
+                //
+                
+            }
+
+            void Dialog_Button_OK_Clicked()
+            {
+                macrofunctionality.CreateNewMacro();
+            }
+
 /* Text Dialog that changes size is WIP.
             void RightSlidertxtboxSizeChanging(object sender, EventArgs e)
             {
