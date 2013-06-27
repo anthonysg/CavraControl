@@ -414,13 +414,6 @@ namespace Cavra_Control
 
                 macrofunctionality.AskUserForMacroName_Dialog().ShowDialog(this);
                 
-
-                if (macrofunctionality.AskUserForMacroName_Dialog().DialogResult == DialogResult.Ok)
-                {
-                    Dialog_Button_OK_Clicked();
-                }
-                //
-                
             }
 
             void Dialog_Button_OK_Clicked()
