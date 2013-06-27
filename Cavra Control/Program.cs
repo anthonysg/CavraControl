@@ -412,13 +412,18 @@ namespace Cavra_Control
                 
                 macrofunctionality = new MacroFunctionality();
 
-                macrofunctionality.AskUserForMacroName_Dialog().ShowDialog(this);
+                if (macrofunctionality.AskUserForMacroName_Dialog().ShowDialog(this) == DialogResult.Ok)
+                {
+                    Dialog_Button_OK_Clicked();
+                }
+                
                 
             }
 
             void Dialog_Button_OK_Clicked()
             {
                 macrofunctionality.CreateNewMacro();
+                macrofunctionality.GenerateMacroButton(Macro_btn);
             }
 
 /* Text Dialog that changes size is WIP.

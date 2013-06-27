@@ -13,12 +13,15 @@ namespace Cavra_Control
     {
         //TextBox userinput_txt;
         string macroData;
-        ImageMenuItem Macro_btn;
+        string fileName;
         MenuBar menu;
+        Button OK_btn;
+        Dialog dialog;
+        
 
         public Dialog AskUserForMacroName_Dialog()
         {
-            var dialog = new Dialog();
+            dialog = new Dialog();
             dialog.ClientSize= new Size(400, 200);
             dialog.WindowState = WindowState.Normal;
 
@@ -38,7 +41,7 @@ namespace Cavra_Control
             //Create a string that will contain data representing above values.
             macroData = userinput_MacroName_txt.Text + "___" + userinput_RightSlider_txt.Text + "___" + userinput_LeftSlider_txt.Text; 
 
-            var OK_btn = new Button();
+            OK_btn = new Button();
             OK_btn.Text = "OK";
             
             layout.AddCentered(instructions_lbl);
@@ -46,28 +49,33 @@ namespace Cavra_Control
             layout.AddRow(userinput_RightSlider_txt, userinput_LeftSlider_txt);
             layout.AddCentered(OK_btn);
 
-            OK_btn.Click += delegate { dialog.DialogResult = DialogResult.Ok; };
-            
+            OK_btn.Click += ChangeDialogResult;
+
             return dialog;
         }
 
-        public void CreateNewMacro()
+        public void ChangeDialogResult(object sender, EventArgs e)
         {
-            int numberOfMenuItems = 0; //important later.
+            dialog.DialogResult = DialogResult.Ok;
+            dialog.Close();
+        }
 
-            string fileName = userinput_MacroName_txt.Text;
+        public void CreateNewMacro()
+        { 
+
+            fileName = userinput_MacroName_txt.Text;
             
             string FULL_fileName = Path.Combine(Directory.GetCurrentDirectory(), fileName);
 
-            if (Directory.GetCurrentDirectory().Contains(FULL_fileName) == false)
-            {
-                File.WriteAllText(FULL_fileName, macroData);
-            }
-            else
-            {
-                File.WriteAllText(FULL_fileName, macroData);
-                //could be useful for later, otherwise if/else statement will be abolished.
-            }
+            //if (Directory.GetCurrentDirectory().Contains(FULL_fileName) == false)
+           
+            File.WriteAllText(FULL_fileName, macroData);
+        }
+
+        public void GenerateMacroButton(ImageMenuItem buttonOnMenu)
+        {
+            int numberOfMenuItems = 0;
+
             var GeneratedMacroButton = new ImageMenuItem();
             GeneratedMacroButton.Text = fileName;
 
@@ -79,8 +87,7 @@ namespace Cavra_Control
                 numberOfMenuItems--;
             }
 
-            Macro_btn.MenuItems.Add(GeneratedMacroButton);
-            
+            buttonOnMenu.MenuItems.Add(GeneratedMacroButton);
         }
 
         public TextBox userinput_RightSlider_txt { get; set; }
