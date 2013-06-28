@@ -25,7 +25,7 @@ namespace Cavra_Control
         public Dialog AskUserForMacroName_Dialog()
         {
             dialog = new Dialog();
-            dialog.ClientSize= new Size(400, 200);
+            dialog.ClientSize= new Size(600, 400);
             dialog.WindowState = WindowState.Normal;
 
             var layout = new DynamicLayout(dialog);
@@ -46,9 +46,10 @@ namespace Cavra_Control
             OK_btn = new Button();
             OK_btn.Text = "OK";
             
-            layout.AddCentered(instructions_lbl);
-            layout.AddCentered(userinput_MacroName_txt);
-            layout.AddRow(userinput_RightSlider_txt, userinput_LeftSlider_txt);
+            layout.Add(instructions_lbl);
+            layout.Add(userinput_MacroName_txt);
+            layout.AddRow(userinput_RightSlider_txt);
+            layout.AddRow(userinput_LeftSlider_txt);
             layout.AddCentered(OK_btn);
 
             OK_btn.Click += ChangeDialogResult;
@@ -64,7 +65,7 @@ namespace Cavra_Control
 
         public void CreateNewMacro()
         {
-            macroData = "Macro Name: " + userinput_MacroName_txt.Text + " Right Slider: " + userinput_RightSlider_txt.Text + "Left Slider: " + userinput_LeftSlider_txt.Text; 
+            macroData = "Macro Name," + userinput_MacroName_txt.Text + ".Right Slider." + userinput_RightSlider_txt.Text + "#Left Slider#" + userinput_LeftSlider_txt.Text; 
 
             fileName = userinput_MacroName_txt.Text;
             
@@ -72,7 +73,7 @@ namespace Cavra_Control
             
             //if (Directory.GetCurrentDirectory().Contains(FULL_fileName) == false)
            
-            File.WriteAllText(FULL_fileName, macroData); //need to fix this.
+            File.WriteAllText(FULL_fileName, macroData);
         }
 
         public void GenerateMacroButton(ImageMenuItem buttonOnMenu)
@@ -95,25 +96,15 @@ namespace Cavra_Control
             GeneratedMacroButton.Click += delegate
             {
                 StreamReader reader = new StreamReader(FULL_fileName);
-
-                Match match = Regex.Match(reader.ReadLine(), "Macro Name: ");
-                //match.
-                
-
-                //reader.ReadLine().
-
-                StreamReader reader = new StreamReader(FULL_fileName);
+                char[] delimiterCharacters = { ',','.','#' };
                 string content = reader.ReadToEnd();
-                Match match = Regex.Match(content, "Macro Name: ");
-                
-                
+                string[] words = content.Split(delimiterCharacters);
 
-                if (reader.Peek() != null)
-                {
-                   reader.Read(match.Length); 
-                   
+                string name = words[1];
 
-                }
+                string rightsliderv = words[3];
+
+                string leftsliderv = words[5];
             };
         }
 
