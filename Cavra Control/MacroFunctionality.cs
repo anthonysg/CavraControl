@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Media;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 using Eto.Drawing;
 using Eto.Forms;
@@ -14,6 +15,8 @@ namespace Cavra_Control
         //TextBox userinput_txt;
         string macroData;
         string fileName;
+        string FULL_fileName;
+
         MenuBar menu;
         Button OK_btn;
         Dialog dialog;
@@ -39,7 +42,6 @@ namespace Cavra_Control
             userinput_LeftSlider_txt.PlaceholderText = "Enter Left Slider Value.";
             
             //Create a string that will contain data representing above values.
-            macroData = userinput_MacroName_txt.Text + "___" + userinput_RightSlider_txt.Text + "___" + userinput_LeftSlider_txt.Text; 
 
             OK_btn = new Button();
             OK_btn.Text = "OK";
@@ -61,15 +63,16 @@ namespace Cavra_Control
         }
 
         public void CreateNewMacro()
-        { 
+        {
+            macroData = "Macro Name: " + userinput_MacroName_txt.Text + " Right Slider: " + userinput_RightSlider_txt.Text + "Left Slider: " + userinput_LeftSlider_txt.Text; 
 
             fileName = userinput_MacroName_txt.Text;
             
-            string FULL_fileName = Path.Combine(Directory.GetCurrentDirectory(), fileName);
-
+            FULL_fileName = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName + ".txt");
+            
             //if (Directory.GetCurrentDirectory().Contains(FULL_fileName) == false)
            
-            File.WriteAllText(FULL_fileName, macroData);
+            File.WriteAllText(FULL_fileName, macroData); //need to fix this.
         }
 
         public void GenerateMacroButton(ImageMenuItem buttonOnMenu)
@@ -88,7 +91,33 @@ namespace Cavra_Control
             }
 
             buttonOnMenu.MenuItems.Add(GeneratedMacroButton);
+
+            GeneratedMacroButton.Click += delegate
+            {
+                StreamReader reader = new StreamReader(FULL_fileName);
+
+                Match match = Regex.Match(reader.ReadLine(), "Macro Name: ");
+                //match.
+                
+
+                //reader.ReadLine().
+
+                StreamReader reader = new StreamReader(FULL_fileName);
+                string content = reader.ReadToEnd();
+                Match match = Regex.Match(content, "Macro Name: ");
+                
+                
+
+                if (reader.Peek() != null)
+                {
+                   reader.Read(match.Length); 
+                   
+
+                }
+            };
         }
+
+
 
         public TextBox userinput_RightSlider_txt { get; set; }
 
