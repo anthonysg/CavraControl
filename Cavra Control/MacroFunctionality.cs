@@ -100,11 +100,18 @@ namespace Cavra_Control
                 string content = reader.ReadToEnd();
                 string[] words = content.Split(delimiterCharacters);
 
-                string name = words[1];
+                string macro_name_data = words[1];
 
-                string rightsliderv = words[3];
+                string rightsliderdata = words[3];
 
-                string leftsliderv = words[5];
+                string leftsliderdata = words[5];
+                reader.Close();
+                
+                //need to have a GeneratedMenuButton load rightslider/leftslider values properly - polymorphism/inheritance issue (can't access rightslider.value)
+                //have application check default macrobutton save directory on initialization and automatically load the text files' data so they are prepped to access even after program is reopened.
+                
+                
+                
             };
         }
 

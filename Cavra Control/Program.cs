@@ -129,7 +129,7 @@ namespace Cavra_Control
 
                 this.Menu = menu;
 
-                Macro_btn.Click += Macro_btn_Clicked;
+                Create_New_btn.Click += Macro_btn_Clicked;
             }
 
             void FormLayoutEstablish()
@@ -378,6 +378,7 @@ namespace Cavra_Control
                     leftSlider.Value = value2;
                 }
             }
+
             void MuteRightSlider(object sender, EventArgs e)
             {
                 if (rightSlider.Value != 100)
@@ -408,7 +409,6 @@ namespace Cavra_Control
 
             void Macro_btn_Clicked(object sender, EventArgs e)
             {
-                string user_specified_fileName; //collect from user input and insert into MacroFunctionality.CreateNewMacro.
                 
                 macrofunctionality = new MacroFunctionality();
 
@@ -424,8 +424,13 @@ namespace Cavra_Control
             {
                 macrofunctionality.CreateNewMacro();
                 macrofunctionality.GenerateMacroButton(Macro_btn);
+                
             }
 
+            public void GeneratedMacroButtonClicked(object sender, EventArgs e)
+            {
+                 
+            }
 /* Text Dialog that changes size is WIP.
             void RightSlidertxtboxSizeChanging(object sender, EventArgs e)
             {
