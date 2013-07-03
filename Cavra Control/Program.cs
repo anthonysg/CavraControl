@@ -59,7 +59,7 @@ namespace Cavra_Control
 
             public CavraControl()
             {
-                this.ClientSize = new Size(400, 350);
+                this.ClientSize = new Size(400, 335);
                 this.WindowState = WindowState.Normal;
                 this.Title = "Cavra Control";
                 this.BringToFront();
@@ -166,7 +166,7 @@ namespace Cavra_Control
                 };
 
                 waveFiletxtbox = new TextBox();
-                waveFiletxtbox.Text = "Open a Wave File";
+                waveFiletxtbox.PlaceholderText = "Open a Wave File";
                 wavefilestring = waveFiletxtbox.Text;
                 waveFiletxtbox.TextChanged += TextChangeInWaveFileTxtBox;
                 
