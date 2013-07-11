@@ -10,15 +10,13 @@ namespace Cavra_Control
 {
     class MainClass : Application
     {
+
+
         [STAThread]
         public static void Main(string[] args)
         {
 
             var app = new Application();
-
-            Uri resourceslocation = new Uri(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources));
-            string resourceLocationStr = resourceslocation.ToString();
-            Preload.SetResourcePath(resourceLocationStr);
 
             app.Initialized += delegate
             {
@@ -29,8 +27,19 @@ namespace Cavra_Control
 
         }
 
+        
+        
         class CavraControl : Form
         {
+			readonly Bitmap RIGHT_MUTE_IMG = LoadResource("Cavra_Control.rightmute.png");
+        	readonly Bitmap RIGHT_SOUND_MEDIUM_MON_IMG = LoadResource("Cavra_Control.rightsoundmediumon.png");
+	        readonly Bitmap RIGHT_SOUND_ON_IMG = LoadResource("Cavra_Control.rightsoundon.png");
+	        readonly Bitmap LEFT_MUTE_IMG = LoadResource("Cavra_Control.leftmute.png");
+	        readonly Bitmap LEFT_SOUND_MEDIUM_MON_IMG = LoadResource("Cavra_Control.leftsoundmediumon.png");
+	        readonly Bitmap LEFT_SOUND_ON_IMG = LoadResource("Cavra_Control.leftsoundon.png");
+	        readonly Bitmap PLAY_ICON = LoadResource("Cavra_Control.playicon.png");
+	        readonly Bitmap STOP_ICON = LoadResource("Cavra_Control.stopicon.png");
+
             int screenX;
             int screenY;
 
@@ -65,15 +74,6 @@ namespace Cavra_Control
                 this.WindowState = WindowState.Normal;
 				this.BringToFront();
 #endif
-
-                //preload images and insert into cache.
-                Preload.ImageResource("rightmute.png");  // , 22, 22, ImageInterpolation.Default, null);
-                Preload.ImageResource("rightsoundmediumon.png");
-                Preload.ImageResource("rightsoundon.png");
-
-                Preload.ImageResource("leftmute.png");
-                Preload.ImageResource("leftsoundmediumon.png");
-                Preload.ImageResource("leftsoundon.png");
 
                 GenerateMenu();
 
@@ -112,6 +112,11 @@ namespace Cavra_Control
             }
 
 #endif
+			static Bitmap LoadResource(string resource)
+        	{
+            	return new Bitmap(Bitmap.FromResource(resource), 16, 16);
+        	}
+
             void GenerateMenu()
             {
                 menu = new MenuBar();
@@ -190,7 +195,7 @@ namespace Cavra_Control
 
                 Button play = new Button();
                 play.Text = "Play";
-                play.Image = Preload.ImageResource("playicon.png");
+                play.Image = PLAY_ICON;
                 play.Click += delegate { if (null != player)
                     try { player.Play(); }
                     catch (Exception exc)
@@ -200,7 +205,7 @@ namespace Cavra_Control
 
                 Button stop = new Button();
                 stop.Text = "Stop";
-                stop.Image = Preload.ImageResource("stopicon.png");
+                stop.Image = STOP_ICON;
                 stop.Click += delegate { if (null != player) player.Stop(); };
 
                 var btn_panel = new DynamicLayout(new Panel());
@@ -231,7 +236,7 @@ namespace Cavra_Control
                 rightSlidertxtbox.TextChanged += rightSliderTxtBoxChanged;
 
                 rightMutebtn = new Button();
-                rightMutebtn.Image = Preload.ImageResource("rightsoundon.png");
+                rightMutebtn.Image = RIGHT_SOUND_ON_IMG;
                 rightMutebtn.BackgroundColor = Colors.LightSkyBlue;
                 rightMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 rightMutebtn.Click += MuteRightSlider;
@@ -269,7 +274,7 @@ namespace Cavra_Control
                 leftSlidertxtbox.TextChanged += leftSliderTxtBoxChanged;
 
                 leftMutebtn = new Button();
-                leftMutebtn.Image = Preload.ImageResource("leftsoundon.png");
+                leftMutebtn.Image = LEFT_SOUND_ON_IMG;
                 leftMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 leftMutebtn.BackgroundColor = Colors.OrangeRed;
                 leftMutebtn.Click += MuteLeftSlider;
@@ -322,15 +327,15 @@ namespace Cavra_Control
             {
                 if (rightSlider.Value == 100)
                 {
-                    rightMutebtn.Image = Preload.ImageResource("rightmute.png");
+                    rightMutebtn.Image = RIGHT_MUTE_IMG;
                 }
                 else if (rightSlider.Value >= 50)
                 {
-                    rightMutebtn.Image = Preload.ImageResource("rightsoundmediumon.png");
+                    rightMutebtn.Image = RIGHT_SOUND_MEDIUM_MON_IMG;
                 }
                 else
                 {
-                    rightMutebtn.Image = Preload.ImageResource("rightsoundon.png");
+                    rightMutebtn.Image = RIGHT_SOUND_ON_IMG;
                 }
                 rightSlidertxtbox.Text = rightSlider.Value.ToString();
             }
@@ -339,15 +344,15 @@ namespace Cavra_Control
             {
                 if (leftSlider.Value == 100)
                 {
-                    leftMutebtn.Image = Preload.ImageResource("leftmute.png");
+                    leftMutebtn.Image = LEFT_MUTE_IMG;
                 }
                 else if (leftSlider.Value >= 50)
                 {
-                    leftMutebtn.Image = Preload.ImageResource("leftsoundmediumon.png");
+                    leftMutebtn.Image = LEFT_SOUND_MEDIUM_MON_IMG;
                 }
                 else
                 {
-                    leftMutebtn.Image = Preload.ImageResource("leftsoundon.png");
+                    leftMutebtn.Image = LEFT_SOUND_ON_IMG;
                 }
                 leftSlidertxtbox.Text = leftSlider.Value.ToString();
             }

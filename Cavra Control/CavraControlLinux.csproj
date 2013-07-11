@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MacroFunctionality.cs" />
+    <Compile Include="Preload.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
@@ -53,4 +55,30 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\Resources\leftsoundmediumon.png">
+      <Link>leftsoundmediumon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\leftsoundon.png">
+      <Link>leftsoundon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\playicon.png">
+      <Link>playicon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\rightmute.png">
+      <Link>rightmute.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\rightsoundmediumon.png">
+      <Link>rightsoundmediumon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\rightsoundon.png">
+      <Link>rightsoundon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\stopicon.png">
+      <Link>stopicon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\leftmute.png">
+      <Link>leftmute.png</Link>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

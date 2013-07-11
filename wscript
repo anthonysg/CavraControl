@@ -47,6 +47,6 @@ def generate_path_list(path, module):
 def build(ctx):
     ctx.recurse([
         'NCA.CavraDriver',
- #       'Cavra Control'
+        'Cavra Control',
         'Test'
     ])
