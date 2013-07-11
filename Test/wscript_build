@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+# encoding: utf-8
+# Copyright (c) 2012 SjB <steve@nca.uwo.ca>. All Rights Reserved.
+
+TEST_APP_NAME = 'cavra_usb_test.exe'
+
+srcs = [
+    'cavra_usb_test.cs'
+]
+
+external_libs = [
+    'SjB.Hid'
+]
+
+[bld.read_assembly(x, install_path = bld.env.default_app_install_path) for x in external_libs]
+
+uselib = ['NCA.CavraDriver']
+uselib.extend(external_libs)
+
+bld(
+    features = 'cs cs_dev',
+    source = srcs,
+    install_path = bld.env.default_app_install_path,
+    gen = TEST_APP_NAME,
+    type = 'exe',
+    use = uselib
+)
