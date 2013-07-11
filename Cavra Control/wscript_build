@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+# encoding: utf-8
+# Copyright (c) 2012 SjB <steve@nca.uwo.ca>. All Rights Reserved.
+
+srcs = [
+    'Properties/AssemblyInfo.cs',
+    'Program.cs',
+    'MacroFunctionality.cs',
+    'Preload.cs'
+]
+
+external_libs = [
+    'Eto',
+    'Eto.Platform'
+]
+
+images = [
+    '../Resources/leftmute.png,Cavra_Control.leftmute.png',
+    '../Resources/leftsoundon.png,Cavra_Control.leftsoundon.png',
+    '../Resources/rightmute.png,Cavra_Control.rightmute.png',
+    '../Resources/rightsoundon.png,Cavra_Control.rightsoundon.png',
+    '../Resources/leftsoundmediumon.png,Cavra_Control.leftsoundmediumon.png',
+    '../Resources/playicon.png,Cavra_Control.playicon.png',
+    '../Resources/rightsoundmediumon.png,Cavra_Control.rightsoundmediumon.png',
+    '../Resources/stopicon.png,Cavra_Control.stopicon.png'
+]
+
+[bld.read_assembly(x, install_path = bld.env.default_app_install_path) for x in external_libs]
+
+uselib = ['NCA.CavraDriver', 'SjB.Hid']
+uselib.extend(external_libs)
+
+bld(
+    features = 'cs cs_dev',
+    source = srcs,
+    install_path = bld.env.default_app_install_path,
+    gen = '{0}.exe'.format(bld.env.APPNAME),
+    resources = images,
+    type = 'exe',
+    use = uselib
+)

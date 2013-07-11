@@ -6,19 +6,19 @@ using System.Media;
 using Eto.Drawing;
 using Eto.Forms;
 
+using NCA.CavraDriver;
+
 namespace Cavra_Control
 {
     class MainClass : Application
     {
+
+
         [STAThread]
         public static void Main(string[] args)
         {
 
             var app = new Application();
-
-            Uri resourceslocation = new Uri(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources));
-            string resourceLocationStr = resourceslocation.ToString();
-            Preload.SetResourcePath(resourceLocationStr);
 
             app.Initialized += delegate
             {
@@ -28,9 +28,20 @@ namespace Cavra_Control
             app.Run(args);
 
         }
-        
+
+
+
         class CavraControl : Form
         {
+			readonly Bitmap RIGHT_MUTE_IMG = LoadResource("Cavra_Control.rightmute.png");
+        	readonly Bitmap RIGHT_SOUND_MEDIUM_MON_IMG = LoadResource("Cavra_Control.rightsoundmediumon.png");
+	        readonly Bitmap RIGHT_SOUND_ON_IMG = LoadResource("Cavra_Control.rightsoundon.png");
+	        readonly Bitmap LEFT_MUTE_IMG = LoadResource("Cavra_Control.leftmute.png");
+	        readonly Bitmap LEFT_SOUND_MEDIUM_MON_IMG = LoadResource("Cavra_Control.leftsoundmediumon.png");
+	        readonly Bitmap LEFT_SOUND_ON_IMG = LoadResource("Cavra_Control.leftsoundon.png");
+	        readonly Bitmap PLAY_ICON = LoadResource("Cavra_Control.playicon.png");
+	        readonly Bitmap STOP_ICON = LoadResource("Cavra_Control.stopicon.png");
+
             int screenX;
             int screenY;
 
@@ -43,7 +54,7 @@ namespace Cavra_Control
 
             Button rightMutebtn;
             Button leftMutebtn;
-            
+
             SoundPlayer player = null;
             string wavefilestring;
 
@@ -55,35 +66,33 @@ namespace Cavra_Control
             MacroFunctionality macrofunctionality;
 
             MenuBar menu;
-            
+
+            Cavra cavra;
 
             public CavraControl()
             {
-                this.ClientSize = new Size(400, 335);
-                this.WindowState = WindowState.Normal;
+                this.ClientSize = new Size(400, 350);
                 this.Title = "Cavra Control";
-                this.BringToFront();
-                //preload images and insert into cache.
-                Preload.ImageResource("rightmute.png");  // , 22, 22, ImageInterpolation.Default, null);
-                Preload.ImageResource("rightsoundmediumon.png");
-                Preload.ImageResource("rightsoundon.png");
+#if WINDOWS
+                this.WindowState = WindowState.Normal;
+				this.BringToFront();
+#endif
 
-                Preload.ImageResource("leftmute.png");
-                Preload.ImageResource("leftsoundmediumon.png");
-                Preload.ImageResource("leftsoundon.png");
+                cavra = new Cavra();
+                cavra.Connect();
 
                 GenerateMenu();
-                
+
                 /*
- * 
+ *
                 Size defaultSize = new Size(this.Screen.Bounds.Width - 50, this.Screen.Bounds.Height - 50);
                 this.Size = defaultSize;
                 int screenX = (int)(this.Screen.Bounds.X - 100);
                 int screenY = (int)(this.Screen.Bounds.X - 100);
-                Eto.Drawing.Point point = new Point(this.Screen.Bounds.X - 100, this.Screen.Bounds.Y - 100);                             
+                Eto.Drawing.Point point = new Point(this.Screen.Bounds.X - 100, this.Screen.Bounds.Y - 100);
 */
                 //try to get window to appear centered at all times.
-                
+
                 //this.Load += OnFormLoaded;
 
                 /*
@@ -100,26 +109,31 @@ namespace Cavra_Control
                 screenX = (int)(this.Screen.Bounds.X - 2000);
                 screenY = (int)(this.Screen.Bounds.Y - 1);
             }
-            
+
             location not finished-, use .PrimaryScreen() instead
-            
+
             void OnFormShown(object s, EventArgs e)
             {
                 this.Location = (Point)(this.Screen.Bounds.Center - (this.Size / 2));
             }
-            
+
 #endif
+			static Bitmap LoadResource(string resource)
+        	{
+            	return new Bitmap(Bitmap.FromResource(resource), 16, 16);
+        	}
+
             void GenerateMenu()
             {
                 menu = new MenuBar();
-               
+
                 Macro_btn = new ImageMenuItem { Text = "&Macros" };
 
                 var Create_New_btn = new ImageMenuItem();
                 Create_New_btn.Text = "Create New";
 
                 Macro_btn.MenuItems.Add(Create_New_btn);
-                
+
                 menu.MenuItems.Add(Macro_btn);
 
                 var recentlyopened_btn = new ImageMenuItem { Text = "&Recently Opened" };
@@ -135,7 +149,7 @@ namespace Cavra_Control
             void FormLayoutEstablish()
             {
                 var root_panel = new DynamicLayout(this);
-                
+
                 root_panel.Add(PlayerControlBuilder());
                 root_panel.Add(VolumeControlBuilder());
                 root_panel.Add(new Panel());
@@ -143,14 +157,14 @@ namespace Cavra_Control
 
             Control PlayerControlBuilder()
             {
-                var layout = new DynamicLayout(new Panel());                
+                var layout = new DynamicLayout(new Panel());
                 layout.Add(new Label
                 {
                     Text = "Cavra Control",
                     Font = new Font(SystemFont.Bold, 17),
                     HorizontalAlign = HorizontalAlign.Left
                 });
-                
+
                 layout.Add(new Label
                 {
                     Text = "NCA",
@@ -169,7 +183,7 @@ namespace Cavra_Control
                 waveFiletxtbox.PlaceholderText = "Open a Wave File";
                 wavefilestring = waveFiletxtbox.Text;
                 waveFiletxtbox.TextChanged += TextChangeInWaveFileTxtBox;
-                
+
 
                 Button open = new Button
                 {
@@ -181,30 +195,30 @@ namespace Cavra_Control
                 file_panel.BeginHorizontal();
                 file_panel.Add(wavefile, false, false);
                 file_panel.Add(waveFiletxtbox, true, false);
-                file_panel.Add(open, false, false);                
+                file_panel.Add(open, false, false);
                 file_panel.EndHorizontal();
                 layout.Add(file_panel.Container);
-                                      
+
                 Button play = new Button();
                 play.Text = "Play";
-                play.Image = Preload.ImageResource("playicon.png");
+                play.Image = PLAY_ICON;
                 play.Click += delegate { if (null != player)
                     try { player.Play(); }
                     catch (Exception exc)
                     {
                     }
                     };
-                
+
                 Button stop = new Button();
                 stop.Text = "Stop";
-                stop.Image = Preload.ImageResource("stopicon.png");
+                stop.Image = STOP_ICON;
                 stop.Click += delegate { if (null != player) player.Stop(); };
-                
+
                 var btn_panel = new DynamicLayout(new Panel());
                 btn_panel.AddRow(null, play, stop);
-                
+
                 layout.Add(btn_panel.Container, false, false);
-                
+
                 return layout.Container;
             }
 
@@ -228,11 +242,11 @@ namespace Cavra_Control
                 rightSlidertxtbox.TextChanged += rightSliderTxtBoxChanged;
 
                 rightMutebtn = new Button();
-                rightMutebtn.Image = Preload.ImageResource("rightsoundon.png");
+                rightMutebtn.Image = RIGHT_SOUND_ON_IMG;
                 rightMutebtn.BackgroundColor = Colors.LightSkyBlue;
                 rightMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 rightMutebtn.Click += MuteRightSlider;
-                
+
                 /* if you want no borders around mute button.
                 ImageView image = new ImageView();
                 image.Image = new Bitmap(Eto.EtoEnvironment.GetFolderPath(Eto.EtoSpecialFolder.ApplicationResources) + "\\rightmute.png");
@@ -266,7 +280,7 @@ namespace Cavra_Control
                 leftSlidertxtbox.TextChanged += leftSliderTxtBoxChanged;
 
                 leftMutebtn = new Button();
-                leftMutebtn.Image = Preload.ImageResource("leftsoundon.png");
+                leftMutebtn.Image = LEFT_SOUND_ON_IMG;
                 leftMutebtn.ImagePosition = ButtonImagePosition.Overlay;
                 leftMutebtn.BackgroundColor = Colors.OrangeRed;
                 leftMutebtn.Click += MuteLeftSlider;
@@ -276,7 +290,7 @@ namespace Cavra_Control
                 layout.Add(leftMutebtn, false, false);
                 return layout.Container;
             }
-		
+
 
             void OpenFileDialogWindow(object sender, EventArgs e)
             {
@@ -298,9 +312,9 @@ namespace Cavra_Control
                     if (null != player)
                         player.Stop();
                     */
-                     
-                }            
-                
+
+                }
+
             }
 
             void TextChangeInWaveFileTxtBox(object sender, EventArgs e)
@@ -319,15 +333,15 @@ namespace Cavra_Control
             {
                 if (rightSlider.Value == 100)
                 {
-                    rightMutebtn.Image = Preload.ImageResource("rightmute.png");
+                    rightMutebtn.Image = RIGHT_MUTE_IMG;
                 }
                 else if (rightSlider.Value >= 50)
                 {
-                    rightMutebtn.Image = Preload.ImageResource("rightsoundmediumon.png");
+                    rightMutebtn.Image = RIGHT_SOUND_MEDIUM_MON_IMG;
                 }
                 else
                 {
-                    rightMutebtn.Image = Preload.ImageResource("rightsoundon.png");
+                    rightMutebtn.Image = RIGHT_SOUND_ON_IMG;
                 }
                 rightSlidertxtbox.Text = rightSlider.Value.ToString();
             }
@@ -336,15 +350,15 @@ namespace Cavra_Control
             {
                 if (leftSlider.Value == 100)
                 {
-                    leftMutebtn.Image = Preload.ImageResource("leftmute.png");
+                    leftMutebtn.Image = LEFT_MUTE_IMG;
                 }
                 else if (leftSlider.Value >= 50)
                 {
-                    leftMutebtn.Image = Preload.ImageResource("leftsoundmediumon.png");
+                    leftMutebtn.Image = LEFT_SOUND_MEDIUM_MON_IMG;
                 }
                 else
                 {
-                    leftMutebtn.Image = Preload.ImageResource("leftsoundon.png");
+                    leftMutebtn.Image = LEFT_SOUND_ON_IMG;
                 }
                 leftSlidertxtbox.Text = leftSlider.Value.ToString();
             }
@@ -355,28 +369,28 @@ namespace Cavra_Control
                 {
                     int value1 = Convert.ToInt32(rightSlidertxtbox.Text);
                     rightSlider.Value = value1;
+                    cavra.Attenuator.Right = value1;
+
+                } catch (Exception) {
+                    rightSlider.Value = 0;
                 }
-                
-                catch (Exception) 
-                {
-                    int value1 = 0;
-                    rightSlider.Value = value1;
-                }
+
             }
 
             void leftSliderTxtBoxChanged(object sender, EventArgs e)
             {
+                int value2;
                 try
                 {
-                    int value2 = Convert.ToInt32(leftSlidertxtbox.Text);
+                    value2 = Convert.ToInt32(leftSlidertxtbox.Text);
                     leftSlider.Value = value2;
+
+                    cavra.Attenuator.Left = value2;
+
+                } catch (Exception) {
+                    leftSlider.Value = 0;
                 }
 
-                catch (Exception)
-                {
-                    int value2 = 0;
-                    leftSlider.Value = value2;
-                }
             }
 
             void MuteRightSlider(object sender, EventArgs e)
@@ -409,27 +423,27 @@ namespace Cavra_Control
 
             void Macro_btn_Clicked(object sender, EventArgs e)
             {
-                
+
                 macrofunctionality = new MacroFunctionality();
 
                 if (macrofunctionality.AskUserForMacroName_Dialog().ShowDialog(this) == DialogResult.Ok)
                 {
                     Dialog_Button_OK_Clicked();
                 }
-                
-                
+
+
             }
 
             void Dialog_Button_OK_Clicked()
             {
                 macrofunctionality.CreateNewMacro();
                 macrofunctionality.GenerateMacroButton(Macro_btn);
-                
+
             }
 
             public void GeneratedMacroButtonClicked(object sender, EventArgs e)
             {
-                 
+
             }
 /* Text Dialog that changes size is WIP.
             void RightSlidertxtboxSizeChanging(object sender, EventArgs e)
@@ -438,7 +452,7 @@ namespace Cavra_Control
                 Font font = new Font(SystemFont.Default, 17);
                 rightSlidertxtbox.Size = new Size(MeasureTextSize(font, str));
                 //rightSlidertxtbox.Size = new Size(rightSlidertxtbox.Text.Length*13, 25);
-                
+
                 //find a way to measure text size and adjust textbox based off of that.
             }
 
