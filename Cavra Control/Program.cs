@@ -6,6 +6,8 @@ using System.Media;
 using Eto.Drawing;
 using Eto.Forms;
 
+using NCA.CavraDriver;
+
 namespace Cavra_Control
 {
     class MainClass : Application
@@ -27,8 +29,8 @@ namespace Cavra_Control
 
         }
 
-        
-        
+
+
         class CavraControl : Form
         {
 			readonly Bitmap RIGHT_MUTE_IMG = LoadResource("Cavra_Control.rightmute.png");
@@ -65,6 +67,7 @@ namespace Cavra_Control
 
             MenuBar menu;
 
+            Cavra cavra;
 
             public CavraControl()
             {
@@ -74,6 +77,9 @@ namespace Cavra_Control
                 this.WindowState = WindowState.Normal;
 				this.BringToFront();
 #endif
+
+                cavra = new Cavra();
+                cavra.Connect();
 
                 GenerateMenu();
 
@@ -363,28 +369,28 @@ namespace Cavra_Control
                 {
                     int value1 = Convert.ToInt32(rightSlidertxtbox.Text);
                     rightSlider.Value = value1;
+                    cavra.Attenuator.Right = value1;
+
+                } catch (Exception) {
+                    rightSlider.Value = 0;
                 }
 
-                catch (Exception)
-                {
-                    int value1 = 0;
-                    rightSlider.Value = value1;
-                }
             }
 
             void leftSliderTxtBoxChanged(object sender, EventArgs e)
             {
+                int value2;
                 try
                 {
-                    int value2 = Convert.ToInt32(leftSlidertxtbox.Text);
+                    value2 = Convert.ToInt32(leftSlidertxtbox.Text);
                     leftSlider.Value = value2;
+
+                    cavra.Attenuator.Left = value2;
+
+                } catch (Exception) {
+                    leftSlider.Value = 0;
                 }
 
-                catch (Exception)
-                {
-                    int value2 = 0;
-                    leftSlider.Value = value2;
-                }
             }
 
             void MuteRightSlider(object sender, EventArgs e)

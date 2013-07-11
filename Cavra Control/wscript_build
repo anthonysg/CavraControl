@@ -27,7 +27,7 @@ images = [
 
 [bld.read_assembly(x, install_path = bld.env.default_app_install_path) for x in external_libs]
 
-uselib = ['NCA.CavraDriver']
+uselib = ['NCA.CavraDriver', 'SjB.Hid']
 uselib.extend(external_libs)
 
 bld(

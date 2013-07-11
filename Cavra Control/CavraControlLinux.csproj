@@ -21,6 +21,11 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <EnvironmentVariables>
+      <EnvironmentVariables>
+        <Variable name="LIBRARY_PATH" value="" />
+      </EnvironmentVariables>
+    </EnvironmentVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -80,5 +85,11 @@
     <EmbeddedResource Include="..\Resources\leftmute.png">
       <Link>leftmute.png</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NCA.CavraDriver\NCA.CavraDriver.csproj">
+      <Project>{D885249D-8CEA-4958-A7BF-74A2944A630E}</Project>
+      <Name>NCA.CavraDriver</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
