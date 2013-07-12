@@ -6,7 +6,8 @@ srcs = [
     'Properties/AssemblyInfo.cs',
     'Program.cs',
     'MacroFunctionality.cs',
-    'Preload.cs'
+    'IPlayer.cs',
+    'GstPlayer.cs'
 ]
 
 external_libs = [
@@ -27,7 +28,7 @@ images = [
 
 [bld.read_assembly(x, install_path = bld.env.default_app_install_path) for x in external_libs]
 
-uselib = ['NCA.CavraDriver', 'SjB.Hid']
+uselib = ['NCA.CavraDriver', 'SjB.Hid', 'gstreamer-sharp-0.10']
 uselib.extend(external_libs)
 
 bld(
