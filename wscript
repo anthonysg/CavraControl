@@ -42,6 +42,7 @@ def configure(ctx):
 
     ctx.env.default_app_install_path = '${PREFIX}/lib/%s' % APPNAME
 
+
 def generate_path_list(path, module):
         return '{0} {0}/{1}'.format(path, module)
 

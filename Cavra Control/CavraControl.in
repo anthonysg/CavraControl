@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export LD_LIBRARY_PATH=@PREFIX@/lib/@APPNAME@:@EXTRA_LIBDIRS@:$LD_LIBRARY_PATH
+
+/usr/bin/mono @PREFIX@/lib/@APPNAME@/@APPNAME@.exe

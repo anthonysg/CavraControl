@@ -2,6 +2,8 @@
 # encoding: utf-8
 # Copyright (c) 2012 SjB <steve@nca.uwo.ca>. All Rights Reserved.
 
+from waflib import Utils
+
 srcs = [
     'Properties/AssemblyInfo.cs',
     'Program.cs',
@@ -30,6 +32,17 @@ images = [
 
 uselib = ['NCA.CavraDriver', 'SjB.Hid', 'gstreamer-sharp-0.10']
 uselib.extend(external_libs)
+
+if 'linux' == Utils.unversioned_sys_platform():
+    bld.install_native_lib(bld.env.default_app_install_path, ['libhid-cli.so'], 'SjB.Hid')
+
+bld(features='subst',
+    source='CavraControl.in',
+    target='CavraControl',
+    install_path = '${PREFIX}/bin',
+    chmod = Utils.O755,
+    EXTRA_LIBDIRS = '/usr/lib/cli/gstreamer-sharp-0.9',
+    APPNAME = bld.env.APPNAME)
 
 bld(
     features = 'cs cs_dev',
