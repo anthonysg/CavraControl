@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using Eto.Drawing;
 using Eto.Forms;
 
-namespace Cavra_Control
+namespace CavraControl
 {
     class MacroFunctionality
     {
@@ -20,7 +20,7 @@ namespace Cavra_Control
         MenuBar menu;
         Button OK_btn;
         Dialog dialog;
-        
+
 
         public Dialog AskUserForMacroName_Dialog()
         {
@@ -29,23 +29,23 @@ namespace Cavra_Control
             dialog.WindowState = WindowState.Normal;
 
             var layout = new DynamicLayout(dialog);
-            
+
             var instructions_lbl = new Label();
-            
+
             instructions_lbl.Text = "Enter the Desired Macro Name and Information Below. NOTE: Existing Macros with the Same Name will be Replaced.";
-            
+
             userinput_MacroName_txt = new TextBox();
             userinput_MacroName_txt.PlaceholderText = "Enter Name of Macro.";
             userinput_RightSlider_txt = new TextBox();
             userinput_RightSlider_txt.PlaceholderText = "Enter Right Slider Value.";
             userinput_LeftSlider_txt = new TextBox();
             userinput_LeftSlider_txt.PlaceholderText = "Enter Left Slider Value.";
-            
+
             //Create a string that will contain data representing above values.
 
             OK_btn = new Button();
             OK_btn.Text = "OK";
-            
+
             layout.Add(instructions_lbl);
             layout.Add(userinput_MacroName_txt);
             layout.AddRow(userinput_RightSlider_txt);
@@ -65,14 +65,14 @@ namespace Cavra_Control
 
         public void CreateNewMacro()
         {
-            macroData = "Macro Name," + userinput_MacroName_txt.Text + ".Right Slider." + userinput_RightSlider_txt.Text + "#Left Slider#" + userinput_LeftSlider_txt.Text; 
+            macroData = "Macro Name," + userinput_MacroName_txt.Text + ".Right Slider." + userinput_RightSlider_txt.Text + "#Left Slider#" + userinput_LeftSlider_txt.Text;
 
             fileName = userinput_MacroName_txt.Text;
-            
+
             FULL_fileName = Path.Combine(System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName + ".txt");
-            
+
             //if (Directory.GetCurrentDirectory().Contains(FULL_fileName) == false)
-           
+
             File.WriteAllText(FULL_fileName, macroData);
         }
 
@@ -106,12 +106,12 @@ namespace Cavra_Control
 
                 string leftsliderdata = words[5];
                 reader.Close();
-                
+
                 //need to have a GeneratedMenuButton load rightslider/leftslider values properly - polymorphism/inheritance issue (can't access rightslider.value)
                 //have application check default macrobutton save directory on initialization and automatically load the text files' data so they are prepped to access even after program is reopened.
-                
-                
-                
+
+
+
             };
         }
 
@@ -120,7 +120,7 @@ namespace Cavra_Control
         public TextBox userinput_RightSlider_txt { get; set; }
 
         public TextBox userinput_LeftSlider_txt { get; set; }
-    
+
         public  TextBox userinput_MacroName_txt { get; set; }
     }
 }

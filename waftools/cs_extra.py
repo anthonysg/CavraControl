@@ -144,6 +144,12 @@ def set_sdk_version(self, *k, **kw):
 # check if a pkg-config package in install on the system
 @conf
 def check_pkg(self, *k, **kw):
+
+    if k:
+        lst = k[0].split()
+        kw['package'] = lst[0]
+        kw['args'] = ' '.join(lst[1:])
+
     self.check_cfg(**kw)
     if self.get_define(self.have_define(kw['package'])):
         self.env.append_value('packages', 'PKG_%s' % Utils.quote_define_name(kw['package']))
@@ -153,7 +159,9 @@ def check_pkg(self, *k, **kw):
 @conf
 def check_extlib(self, *k, **kw):
 
-    env = self.env
+    if not 'env' in kw:
+        kw['env'] = self.env.derive()
+    env = kw['env']
 
     if not 'package' in kw:
         kw['package'] = k[0]
@@ -184,6 +192,21 @@ def check_extlib(self, *k, **kw):
 
     self.msg(kw['msg'], ret, "GREEN")
 
+@conf
+def install_native_lib(self, dest, files, package=None, env=None, chmod=Utils.O644, relative_trick=False, cwd=None, add=True, postpone=True):
+
+    env = env or self.env
+    libs = []
+
+    if package:
+        uselib = Utils.quote_define_name(package)
+        libpath = getattr(env, '%s_LIBPATH' % uselib, None)
+        for n in files:
+            p = os.path.join(libpath, n)
+            node = self.root.find_node(p)
+            libs.append(node)
+
+    self.install_files(dest, libs, env, chmod, relative_trick, cwd, add, postpone)
 
 @conf
 def read_assembly(self, assembly, install_path = None):
@@ -261,3 +284,4 @@ def copy_config(tgen, target):
     if os.path.isfile(config.abspath()):
         out = tgen.path.find_or_declare(config.name)
         tgen.copy_dependent_lib_config_task = tgen.create_task('copy_file', config, out)
+

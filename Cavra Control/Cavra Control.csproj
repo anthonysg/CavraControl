@@ -55,12 +55,43 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MacroFunctionality.cs" />
-    <Compile Include="Preload.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+   <ItemGroup>
+    <EmbeddedResource Include="..\Resources\leftsoundmediumon.png">
+      <Link>leftsoundmediumon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\leftsoundon.png">
+      <Link>leftsoundon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\playicon.png">
+      <Link>playicon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\rightmute.png">
+      <Link>rightmute.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\rightsoundmediumon.png">
+      <Link>rightsoundmediumon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\rightsoundon.png">
+      <Link>rightsoundon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\stopicon.png">
+      <Link>stopicon.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Resources\leftmute.png">
+      <Link>leftmute.png</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NCA.CavraDriver\NCA.CavraDriver.csproj">
+      <Project>{D885249D-8CEA-4958-A7BF-74A2944A630E}</Project>
+      <Name>NCA.CavraDriver</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

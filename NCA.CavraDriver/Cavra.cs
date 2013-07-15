@@ -34,8 +34,8 @@ namespace NCA.CavraDriver
 		const int PID = 0x000c;
 		const int MUTE_LEVEL = 0x4F;
 
-		const int LEFT_CHANNEL = 0x0000;
-		const int RIGHT_CHANNEL = 0x0001;
+		const int LEFT_CHANNEL = 0x0001;
+		const int RIGHT_CHANNEL = 0x0000;
 
 		static readonly byte[] START_MESSAGE = {0x3, 0x2, 0x0};
 		static readonly byte[] TERMINATE_MESSAGE = {0x0, 0x2, 0x3};

@@ -37,9 +37,11 @@ def configure(ctx):
     ctx.check_etoform(path_list = generate_path_list(ctx.env.default_assembly_dir, 'Eto'))
 
     libusb_libdir = '{0}/SjB.Hid'.format(ctx.env.default_assembly_dir)
-    ctx.check_assembly('SjB.Hid', path_list = libusb_libdir);
+    ctx.check_assembly('SjB.Hid', path_list = libusb_libdir)
+    ctx.check_pkg('gstreamer-sharp-0.10')
 
     ctx.env.default_app_install_path = '${PREFIX}/lib/%s' % APPNAME
+
 
 def generate_path_list(path, module):
         return '{0} {0}/{1}'.format(path, module)

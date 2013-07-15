@@ -8,17 +8,16 @@ using Eto.Forms;
 
 using NCA.CavraDriver;
 
-namespace Cavra_Control
+namespace CavraControl
 {
-    class MainClass : Application
+    class CavraControlApp : Application
     {
-
 
         [STAThread]
         public static void Main(string[] args)
         {
 
-            var app = new Application();
+            var app = new CavraControlApp();
 
             app.Initialized += delegate
             {
@@ -26,9 +25,21 @@ namespace Cavra_Control
                 app.MainForm.Show();
             };
             app.Run(args);
-
         }
 
+        public Cavra Cavra { get; private set; }
+        public IPlayer Player { get; private set; }
+
+        CavraControlApp()
+        {
+            Cavra = new Cavra();
+            Cavra.Connect();
+#if WINDOWS
+            Player = new SmPlayer();
+#else
+			Player = new GstPlayer();
+#endif
+        }
 
 
         class CavraControl : Form
@@ -41,10 +52,10 @@ namespace Cavra_Control
 	        readonly Bitmap LEFT_SOUND_ON_IMG = LoadResource("Cavra_Control.leftsoundon.png");
 	        readonly Bitmap PLAY_ICON = LoadResource("Cavra_Control.playicon.png");
 	        readonly Bitmap STOP_ICON = LoadResource("Cavra_Control.stopicon.png");
-
+#if SET_SCREEN_POSITION
             int screenX;
             int screenY;
-
+#endif
             Slider rightSlider;
             Slider leftSlider;
 
@@ -55,9 +66,6 @@ namespace Cavra_Control
             Button rightMutebtn;
             Button leftMutebtn;
 
-            SoundPlayer player = null;
-            string wavefilestring;
-
             int rightSliderValueSaved;
             int leftSliderValueSaved;
 
@@ -66,8 +74,6 @@ namespace Cavra_Control
             MacroFunctionality macrofunctionality;
 
             MenuBar menu;
-
-            Cavra cavra;
 
             public CavraControl()
             {
@@ -78,30 +84,26 @@ namespace Cavra_Control
 				this.BringToFront();
 #endif
 
-                cavra = new Cavra();
-                cavra.Connect();
-
                 GenerateMenu();
 
-                /*
- *
+#if SET_SCREEN_POSITION
+                //try to get window to appear centered at all times.
                 Size defaultSize = new Size(this.Screen.Bounds.Width - 50, this.Screen.Bounds.Height - 50);
                 this.Size = defaultSize;
                 int screenX = (int)(this.Screen.Bounds.X - 100);
                 int screenY = (int)(this.Screen.Bounds.X - 100);
                 Eto.Drawing.Point point = new Point(this.Screen.Bounds.X - 100, this.Screen.Bounds.Y - 100);
-*/
-                //try to get window to appear centered at all times.
+#endif
 
-                //this.Load += OnFormLoaded;
+#if CENTERED_WINDOWS_FEATURE
+                this.Load += OnFormLoaded;
 
-                /*
                 this.Shown += OnFormShown;
                 this.Show();
-                */
+#endif
                 FormLayoutEstablish();
-
             }
+
 #if CENTERED_WINDOWS_FEATURE
             //wip
             void OnFormLoaded(object s, EventArgs e)
@@ -110,14 +112,13 @@ namespace Cavra_Control
                 screenY = (int)(this.Screen.Bounds.Y - 1);
             }
 
-            location not finished-, use .PrimaryScreen() instead
-
+            // location not finished-, use .PrimaryScreen() instead
             void OnFormShown(object s, EventArgs e)
             {
                 this.Location = (Point)(this.Screen.Bounds.Center - (this.Size / 2));
             }
-
 #endif
+
 			static Bitmap LoadResource(string resource)
         	{
             	return new Bitmap(Bitmap.FromResource(resource), 16, 16);
@@ -181,9 +182,6 @@ namespace Cavra_Control
 
                 waveFiletxtbox = new TextBox();
                 waveFiletxtbox.PlaceholderText = "Open a Wave File";
-                wavefilestring = waveFiletxtbox.Text;
-                waveFiletxtbox.TextChanged += TextChangeInWaveFileTxtBox;
-
 
                 Button open = new Button
                 {
@@ -202,17 +200,12 @@ namespace Cavra_Control
                 Button play = new Button();
                 play.Text = "Play";
                 play.Image = PLAY_ICON;
-                play.Click += delegate { if (null != player)
-                    try { player.Play(); }
-                    catch (Exception exc)
-                    {
-                    }
-                    };
+                play.Click += OnPlayClick;
 
                 Button stop = new Button();
                 stop.Text = "Stop";
                 stop.Image = STOP_ICON;
-                stop.Click += delegate { if (null != player) player.Stop(); };
+                stop.Click += OnStopClick;
 
                 var btn_panel = new DynamicLayout(new Panel());
                 btn_panel.AddRow(null, play, stop);
@@ -220,6 +213,28 @@ namespace Cavra_Control
                 layout.Add(btn_panel.Container, false, false);
 
                 return layout.Container;
+            }
+
+            void OnPlayClick(object sender, EventArgs e) {
+                var player = (Application.Instance as CavraControlApp).Player;
+
+                var wavFilePath = waveFiletxtbox.Text;
+                var fInfo = new FileInfo(wavFilePath);
+                if (fInfo.Exists) {
+                    try {
+                        player.Load(wavFilePath);
+                        player.Play();
+                    } catch (Exception ex) {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+
+            void OnStopClick(object sender, EventArgs e)
+            {
+                var app = Application.Instance as CavraControlApp;
+                if (null != app)
+                    app.Player.Stop();
             }
 
             Control VolumeControlBuilder()
@@ -291,7 +306,6 @@ namespace Cavra_Control
                 return layout.Container;
             }
 
-
             void OpenFileDialogWindow(object sender, EventArgs e)
             {
                 OpenFileDialog openfiledialog = new OpenFileDialog();
@@ -302,31 +316,11 @@ namespace Cavra_Control
 
                 openfiledialog.Filters = new FileDialogFilter[] { new FileDialogFilter("WAV", ".wav")};
 
-
-
                 if (openfiledialog.ShowDialog(ParentWindow) == DialogResult.Ok)
                 {
                     waveFiletxtbox.Text = openfiledialog.FileName;
-                    player = new SoundPlayer(waveFiletxtbox.Text);
-                    /*
-                    if (null != player)
-                        player.Stop();
-                    */
-
                 }
 
-            }
-
-            void TextChangeInWaveFileTxtBox(object sender, EventArgs e)
-            {
-                try
-                {
-                    player = new SoundPlayer(waveFiletxtbox.Text);
-                }
-                catch (Exception ex)
-                {
-                    player = null;
-                }
             }
 
             void rightSliderChanged(object sender, EventArgs e)
@@ -365,32 +359,32 @@ namespace Cavra_Control
 
             void rightSliderTxtBoxChanged(object sender, EventArgs e)
             {
+                int v = 0;
                 try
                 {
-                    int value1 = Convert.ToInt32(rightSlidertxtbox.Text);
-                    rightSlider.Value = value1;
-                    cavra.Attenuator.Right = value1;
-
+                    v = Convert.ToInt32(rightSlidertxtbox.Text);
                 } catch (Exception) {
-                    rightSlider.Value = 0;
+                    v = 0;
                 }
+                rightSlider.Value = v;
 
+                var app = Application.Instance as CavraControlApp;
+                app.Cavra.Attenuator.Right = v;
             }
 
             void leftSliderTxtBoxChanged(object sender, EventArgs e)
             {
-                int value2;
+                int v = 0;
                 try
                 {
-                    value2 = Convert.ToInt32(leftSlidertxtbox.Text);
-                    leftSlider.Value = value2;
-
-                    cavra.Attenuator.Left = value2;
-
+                    v = Convert.ToInt32(leftSlidertxtbox.Text);
                 } catch (Exception) {
-                    leftSlider.Value = 0;
+                    v = 0;
                 }
+                leftSlider.Value = v;
 
+                var app = Application.Instance as CavraControlApp;
+                app.Cavra.Attenuator.Left = v;
             }
 
             void MuteRightSlider(object sender, EventArgs e)
@@ -430,21 +424,19 @@ namespace Cavra_Control
                 {
                     Dialog_Button_OK_Clicked();
                 }
-
-
             }
 
             void Dialog_Button_OK_Clicked()
             {
                 macrofunctionality.CreateNewMacro();
                 macrofunctionality.GenerateMacroButton(Macro_btn);
-
             }
 
             public void GeneratedMacroButtonClicked(object sender, EventArgs e)
             {
 
             }
+
 /* Text Dialog that changes size is WIP.
             void RightSlidertxtboxSizeChanging(object sender, EventArgs e)
             {
