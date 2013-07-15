@@ -8,7 +8,7 @@
     <ProjectGuid>{DA79F4E2-8695-41EA-8E8E-4F7C727F975F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cavra_Control</RootNamespace>
+    <RootNamespace>CavraControl</RootNamespace>
     <AssemblyName>Cavra Control</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -45,6 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Eto.Platform.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="SjB.Hid">
+      <HintPath>..\Lib\SjB.Hid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,11 +57,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPlayer.cs" />
     <Compile Include="MacroFunctionality.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SmPlayer.cs" />
   </ItemGroup>
-   <ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="..\Resources\leftsoundmediumon.png">
       <Link>leftsoundmediumon.png</Link>
     </EmbeddedResource>
